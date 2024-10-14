@@ -36,6 +36,8 @@
  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Tutorial author: Samuel Thomas, Brown University
  */
 
 /**
@@ -116,6 +118,9 @@ class AbstractMemory : public ClockedObject
 
     // Pointer to host memory used to implement this memory
     uint8_t* pmemAddr;
+
+    // for tutorial :-)
+    uint8_t* security_metadata;
 
     // Backdoor to access this memory.
     MemBackdoor backdoor;

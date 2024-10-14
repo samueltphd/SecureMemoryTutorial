@@ -36,6 +36,8 @@
  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Tutorial author: Samuel Thomas, Brown University
  */
 
 #include "mem/abstract_mem.hh"
@@ -69,6 +71,8 @@ AbstractMemory::AbstractMemory(const Params &p) :
     panic_if(!range.valid() || !range.size(),
              "Memory range %s must be valid with non-zero size.",
              range.to_string());
+    // for tutorial :-)
+    security_metadata = (uint8_t *) malloc(sizeof(uint8_t) * 64);
 }
 
 void
@@ -391,9 +395,14 @@ AbstractMemory::access(PacketPtr pkt)
       return;
     }
 
-    assert(pkt->getAddrRange().isSubset(range));
+    // assert(pkt->getAddrRange().isSubset(range));
 
-    uint8_t *host_addr = toHostAddr(pkt->getAddr());
+    uint8_t *host_addr;
+    if (pkt->getAddrRange().isSubset(range)) {
+        host_addr = toHostAddr(pkt->getAddr());
+    } else {
+        host_addr = security_metadata;
+    }
 
     if (pkt->cmd == MemCmd::SwapReq) {
         if (pkt->isAtomicOp()) {
@@ -481,7 +490,7 @@ AbstractMemory::access(PacketPtr pkt)
 void
 AbstractMemory::functionalAccess(PacketPtr pkt)
 {
-    assert(pkt->getAddrRange().isSubset(range));
+    // assert(pkt->getAddrRange().isSubset(range));
 
     uint8_t *host_addr = toHostAddr(pkt->getAddr());
 
